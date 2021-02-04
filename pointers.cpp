@@ -33,20 +33,19 @@ int main(int argc, char **argv)
     std::cin.getline(student.l_name, 128);
     
     student.n_assignments = promptInt("Please enter how many assignments were graded: ", 1, sizeof(int));
-
+    std::cout << std::endl;
     student.grades = new double[student.n_assignments];
     for(int i = 0; i < student.n_assignments; i++){
-        std::string prompt = "Please enter grade for assignment: ";
-        prompt += i;
-        prompt += ": ";
+        std::string prompt = "Please enter grade for assignment " + std::to_string(i) + ": ";
         student.grades[i] = promptDouble(prompt, 0, 1000);
     }
-    
+    std::cout << std::endl;
 
     // Call `CalculateStudentAverage(???, ???)`
     calculateStudentAverage(&student, &average);
     // Output `average`
-    std::cout<< average;
+    std::cout << "Student: " << student.f_name << " " << student.l_name << "[" << student.id << "]\n";
+    std::cout<<"\t" << "Average grade: " << average<<std::endl;
     return 0;
 }
 
