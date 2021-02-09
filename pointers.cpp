@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     std::cout << "Please enter the student's last name: ";
     std::cin.getline(student.l_name, 128);
     
-    student.n_assignments = promptInt("Please enter how many assignments were graded: ", 1, sizeof(int));
+    student.n_assignments = promptInt("Please enter how many assignments were graded: ", 1, 134217728);
     std::cout << std::endl;
     student.grades = new double[student.n_assignments];
     for(int i = 0; i < student.n_assignments; i++){
@@ -68,22 +68,26 @@ int promptInt(std::string message, int min, int max)
         int i = 0;
         std::cout << message;
         std::cin.getline(input, 128);
-        while(input[i] != '\n'){
+
+        //make sure the input is valid
+        while(input[i] != '\0'){
             if(input[i] < 48 || input[i] > 57){
-                std::cout << (input[i]); 
                 valid = false;
+                break;
             }else{
                 valid = true;
             }
             i++;
         }
+        //make sure the number is actually in range
         if(valid){
             number = std::stoi(input);
             if(number > max || number < min){
                 valid = false;
+                std::cout << "Sorry, I cannot understand your answer"<<std::endl;
             }
         }else{
-            std::cout << "Sorry I couldn't understand that please try again"<<std::endl;
+            std::cout << "Sorry, I cannot understand your answer"<<std::endl;
         }
     }
    
@@ -97,17 +101,41 @@ int promptInt(std::string message, int min, int max)
 */
 double promptDouble(std::string message, double min, double max)
 {
-    double input;
-    std::cout << message;
-    std::cin >> input;
-    while(!std::cin || (input < min || input > max)){
-        std::cin.clear();
-        std::cin.ignore(10000, '\n');
-        std::cout << "Sorry I couldn't understand that please try again"<<std::endl;
+
+
+    char* input;
+    input = new char[128];
+    double number;
+
+    bool valid = false;
+    while(!valid){
+        int i = 0;
         std::cout << message;
-        std::cin >> input;
+        std::cin.getline(input, 128);
+
+        //make sure the input is valid
+        while(input[i] != '\0'){
+            if(input[i] != 47 && (input[i] < 46 || input[i] > 57)){
+                valid = false;
+                break;
+            }else{
+                valid = true;
+            }
+            i++;
+        }
+        //make sure the number is actually in range
+        if(valid){
+            number = std::stod(input);
+            if(number > max || number < min){
+                valid = false;
+                std::cout << "Sorry, I cannot understand your answer"<<std::endl;
+            }
+        }else{
+            std::cout << "Sorry, I cannot understand your answer"<<std::endl;
+        }
     }
-    return input;
+   
+    return number;
 }
 
 /*
