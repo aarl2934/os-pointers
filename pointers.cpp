@@ -1,5 +1,6 @@
 // compile: g++ -std=c++11 -o pointers pointers.cpp
 #include <iostream>
+#include <iomanip>
 #include <string>
 
 
@@ -44,8 +45,9 @@ int main(int argc, char **argv)
     // Call `CalculateStudentAverage(???, ???)`
     calculateStudentAverage(&student, &average);
     // Output `average`
-    std::cout << "Student: " << student.f_name << " " << student.l_name << "[" << student.id << "]\n";
-    std::cout<<"\t" << "Average grade: " << average<<std::endl;
+    std::cout << "Student: " << student.f_name << " " << student.l_name << " [" << student.id << "]\n";
+    std::cout << std::setprecision(3);
+    std::cout<<"  Average grade: " << average<<std::endl;
     return 0;
 }
 
@@ -57,17 +59,35 @@ int main(int argc, char **argv)
 int promptInt(std::string message, int min, int max)
 {
     // Code to prompt user for an int
-    int input;
-    std::cout << message;
-    std::cin >> input;
-    while(!std::cin || (input < min || input > max)){
-        std::cin.clear();
-        std::cin.ignore();
-        std::cout << "Sorry I couldn't understand that please try again";
-        std::cin >> input;
+    char* input;
+    input = new char[128];
+    int number;
+
+    bool valid = false;
+    while(!valid){
+        int i = 0;
+        std::cout << message;
+        std::cin.getline(input, 128);
+        while(input[i] != '\n'){
+            if(input[i] < 48 || input[i] > 57){
+                std::cout << (input[i]); 
+                valid = false;
+            }else{
+                valid = true;
+            }
+            i++;
+        }
+        if(valid){
+            number = std::stoi(input);
+            if(number > max || number < min){
+                valid = false;
+            }
+        }else{
+            std::cout << "Sorry I couldn't understand that please try again"<<std::endl;
+        }
     }
-    std::cin.ignore();
-    return input;
+   
+    return number;
 }
 
 /*
@@ -82,8 +102,9 @@ double promptDouble(std::string message, double min, double max)
     std::cin >> input;
     while(!std::cin || (input < min || input > max)){
         std::cin.clear();
-        std::cin.ignore();
-        std::cout << "Sorry I couldn't understand that please try again";
+        std::cin.ignore(10000, '\n');
+        std::cout << "Sorry I couldn't understand that please try again"<<std::endl;
+        std::cout << message;
         std::cin >> input;
     }
     return input;
