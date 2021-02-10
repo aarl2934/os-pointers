@@ -125,7 +125,14 @@ double promptDouble(std::string message, double min, double max)
         }
         //make sure the number is actually in range
         if(valid){
-            number = std::stod(input);
+            try{
+                number = std::stod(input);
+            }catch(const std::invalid_argument){
+                valid = false;
+                std::cout << "Sorry, I cannot understand your answer"<<std::endl;
+                continue;
+            }
+            
             if(number > max || number < min){
                 valid = false;
                 std::cout << "Sorry, I cannot understand your answer"<<std::endl;
